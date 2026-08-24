@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colores de SocioUnido */
+  --color-brand: #3b82f6;
+  --color-brand-dark: #2563eb;
+  --color-dark-bg: #0a0a0a;
+  --color-dark-surface: #141414;
+  --color-dark-border: #262626;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-dark-bg);
+  color: #f5f5f5;
+}
