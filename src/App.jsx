@@ -4,7 +4,7 @@ import { ShieldCheck, Smartphone, TrendingUp, MessageSquare, ChevronRight, Check
 export default function App() {
   const [formData, setFormData] = useState({ club: '', email: '' });
   const [status, setStatus] = useState('idle');
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('loading');
@@ -50,7 +50,6 @@ export default function App() {
           </div>
           <nav className="hidden md:flex gap-8 text-sm font-medium text-gray-400">
             <a href="#caracteristicas" className="hover:text-white transition-colors">Características</a>
-            <a href="#beneficios" className="hover:text-white transition-colors">Beneficios</a>
             <a href="#contacto" className="hover:text-white transition-colors">Contacto</a>
           </nav>
           <div className="flex items-center gap-4">
