@@ -53,9 +53,6 @@ export default function App() {
             <a href="#contacto" className="hover:text-white transition-colors">Contacto</a>
           </nav>
           <div className="flex items-center gap-4">
-            <a href="https://admin.sociounido.com.ar" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
-              Ingresar
-            </a>
             <a href="#contacto" className="hidden md:flex items-center justify-center bg-brand hover:bg-brand-dark text-white text-sm font-semibold py-2 px-5 rounded-full transition-all hover:scale-105">
               Solicitar Demo
             </a>
