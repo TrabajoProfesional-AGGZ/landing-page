@@ -1,21 +1,62 @@
-import { ShieldCheck, Smartphone, TrendingUp, MessageSquare, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
+import { ShieldCheck, Smartphone, TrendingUp, MessageSquare, ChevronRight, CheckCircle2, Loader2, CheckCircle, XCircle } from 'lucide-react';
 
 export default function App() {
+  const [formData, setFormData] = useState({ club: '', email: '' });
+  const [status, setStatus] = useState('idle');
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('loading');
+
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/sociounido@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `🚨 NUEVA SOLICITUD DE DEMO: ${formData.club}`,
+          Club: formData.club,
+          Email_Contacto: formData.email,
+          Mensaje: `El club "${formData.club}" ha solicitado una demo a través de la Landing Page. Por favor, contactarse al email proporcionado.`,
+          _template: 'box'
+        }),
+      });
+
+      if (!response.ok) throw new Error('Error al enviar el correo');
+
+      setStatus('success');
+      setFormData({ club: '', email: '' });
+
+      setTimeout(() => setStatus('idle'), 5000);
+
+    } catch (error) {
+      console.error(error);
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 5000);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-dark-bg font-sans selection:bg-brand selection:text-white">
       {/* HEADER */}
       <header className="fixed top-0 w-full z-50 bg-dark-bg/80 backdrop-blur-md border-b border-dark-border">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            {/* agrego el logo de sociounido */}
             <img src="/pwa-512x512.png" alt="SocioUnido Logo" className="h-8 w-8" />
             <span className="text-xl font-bold tracking-tight">SocioUnido</span>
           </div>
           <nav className="hidden md:flex gap-8 text-sm font-medium text-gray-400">
             <a href="#caracteristicas" className="hover:text-white transition-colors">Características</a>
+            <a href="#beneficios" className="hover:text-white transition-colors">Beneficios</a>
             <a href="#contacto" className="hover:text-white transition-colors">Contacto</a>
           </nav>
           <div className="flex items-center gap-4">
+            <a href="https://admin.sociounido.com.ar" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+              Ingresar
+            </a>
             <a href="#contacto" className="hidden md:flex items-center justify-center bg-brand hover:bg-brand-dark text-white text-sm font-semibold py-2 px-5 rounded-full transition-all hover:scale-105">
               Solicitar Demo
             </a>
@@ -95,11 +136,38 @@ export default function App() {
             Dejanos tus datos y nos pondremos en contacto para mostrarte cómo SocioUnido puede adaptarse a tu club.
           </p>
           
-          <form className="flex flex-col gap-4 max-w-md mx-auto text-left" onSubmit={(e) => e.preventDefault()}>
-            <input type="text" placeholder="Nombre de tu Club" className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand transition-colors" />
-            <input type="email" placeholder="Correo electrónico institucional" className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand transition-colors" />
-            <button className="w-full bg-brand hover:bg-brand-dark text-white font-bold text-lg py-4 rounded-lg mt-2 transition-transform hover:scale-[1.02]">
-              Enviar solicitud
+          <form className="flex flex-col gap-4 max-w-md mx-auto text-left" onSubmit={handleSubmit}>
+            <input 
+              type="text" 
+              required
+              placeholder="Nombre de tu Club" 
+              value={formData.club}
+              onChange={(e) => setFormData({...formData, club: e.target.value})}
+              disabled={status === 'loading'}
+              className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand transition-colors disabled:opacity-50" 
+            />
+            <input 
+              type="email" 
+              required
+              placeholder="Correo electrónico institucional" 
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              disabled={status === 'loading'}
+              className="w-full bg-dark-bg border border-dark-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand transition-colors disabled:opacity-50" 
+            />
+            
+            <button 
+              type="submit"
+              disabled={status === 'loading' || status === 'success'}
+              className={`w-full font-bold text-lg py-4 rounded-lg mt-2 transition-all flex justify-center items-center gap-2
+                ${status === 'success' ? 'bg-emerald-600 text-white' : 
+                  status === 'error' ? 'bg-red-600 text-white' : 
+                  'bg-brand hover:bg-brand-dark text-white hover:scale-[1.02]'}`}
+            >
+              {status === 'idle' && 'Enviar solicitud'}
+              {status === 'loading' && <><Loader2 className="animate-spin" size={24} /> Procesando...</>}
+              {status === 'success' && <><CheckCircle size={24} /> ¡Solicitud enviada!</>}
+              {status === 'error' && <><XCircle size={24} /> Ocurrió un error</>}
             </button>
           </form>
           
